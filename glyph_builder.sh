@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/bin/bash
 # desc: bash script for creating yaft's glyph.h
 
 # settings
@@ -36,7 +36,7 @@ DINA_DIR=ProgrammingFonts/Dina/BDF
 DINA_URL=https://github.com/ProgrammingFonts/ProgrammingFonts.git
 
 # terminus font
-TERMINUS_VERSION=4.39
+TERMINUS_VERSION=4.48
 TERMINUS_NAME=terminus-font-${TERMINUS_VERSION}
 TERMINUS_FILE=${TERMINUS_NAME}.tar.gz
 TERMINUS_URL=http://sourceforge.net/projects/terminus-font/files/${TERMINUS_NAME}/${TERMINUS_FILE}

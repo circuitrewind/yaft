@@ -81,8 +81,12 @@ void esc_sequence(struct terminal_t *term, uint8_t ch)
 
 	logging(DEBUG, "esc: ESC %s\n", term->esc.buf);
 
-	if (strlen(term->esc.buf) == 1 && esc_func[ch])
-		esc_func[ch](term);
+	if (strlen(term->esc.buf) == 1) {
+		if (esc_func[ch]) {
+			esc_func[ch](term);
+		}
+	}
+
 
 	/* not reset if csi/osc/dcs seqence */
 	if (ch == '[' || ch == ']' || ch == 'P')

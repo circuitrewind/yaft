@@ -23,7 +23,8 @@ enum {
 };
 
 /* TERM value */
-const char *term_name = "yaft-256color";
+//const char *term_name = "yaft-256color";
+const char *term_name = "xterm-256color";
 
 /* framubuffer device */
 #if defined(__linux__)
@@ -41,7 +42,9 @@ const char *term_name = "yaft-256color";
 /* shell */
 #if defined(__linux__) || defined(__MACH__)
 	const char *shell_cmd = "/bin/bash";
-#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+#elif defined(__FreeBSD__)
+	const char *shell_cmd = "/bin/sh";
+#elif defined(__NetBSD__) || defined(__OpenBSD__)
 	const char *shell_cmd = "/bin/csh";
 #elif defined(__ANDROID__)
 	const char *shell_cmd = "/system/bin/sh";

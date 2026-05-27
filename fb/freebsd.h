@@ -72,7 +72,7 @@ void set_type_visual(struct fb_info_t *info, int type, int visual)
 	else
 		info->visual =  YAFT_FB_VISUAL_UNKNOWN;
 }
-
+/*
 bool set_fbinfo(int fd, struct fb_info_t *info)
 {
 	int video_mode;
@@ -109,4 +109,37 @@ bool set_fbinfo(int fd, struct fb_info_t *info)
 	set_type_visual(info, vinfo.vi_mem_model, ainfo.va_flags);
 
 	return true;
+}
+*/
+bool set_fbinfo(int fd, struct fb_info_t *info)
+{
+    struct fbtype fb_info;
+
+    if (ioctl(fd, FBIOGTYPE, &fb_info) == -1) {
+        logging(ERROR, "ioctl: FBIOGTYPE failed\n");
+        return false;
+    }
+
+    info->width  = fb_info.fb_width;
+    info->height = fb_info.fb_height;
+
+    // Calculate sizes based on reported depth (usually 32bpp on Pi)
+    info->bits_per_pixel  = fb_info.fb_depth;
+    info->bytes_per_pixel = my_ceil(fb_info.fb_depth, BITS_PER_BYTE);
+    info->line_length     = info->width * info->bytes_per_pixel;
+    info->screen_size     = info->line_length * info->height;
+
+    // Hardcode TrueColor bitfields (Standard for vt_fb/Raspberry Pi)
+    // Red [16-23], Green [8-15], Blue [0-7]
+    info->red.offset   = 16; info->red.length   = 8;
+    info->green.offset = 8;  info->green.length = 8;
+    info->blue.offset  = 0;  info->blue.length  = 8;
+
+    // vt(4) is always a truecolor packed-pixel framebuffer
+    info->type   = YAFT_FB_TYPE_PACKED_PIXELS;
+    info->visual = YAFT_FB_VISUAL_TRUECOLOR;
+
+    logging(DEBUG, "vt_fb: %dx%d %dbpp\n", info->width, info->height, info->bits_per_pixel);
+
+    return true;
 }
